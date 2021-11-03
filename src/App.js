@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { Router } from 'react-router-dom';
 
 import './config/reactotronConfig';
+import 'antd/dist/antd.css'; 
 
 import Routes from './routes';
 import history from './services/history';

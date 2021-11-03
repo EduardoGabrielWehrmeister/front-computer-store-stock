@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { MdSearch } from 'react-icons/md';
+import { Modal, Button } from 'antd';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 
 import {
   Background,
@@ -12,14 +15,16 @@ import {
 
 import api from '~/services/api';
 
+function destroyAll() {
+  Modal.destroyAll();
+}
+
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
 
   async function loadProducts() {
-    const { data } = await api.get('/orders', {
-      params: { product: '' },
-    });
+    const { data } = await api.get('/orders');
     setProducts(data);
     setFilteredProducts(data);
   }
@@ -30,8 +35,21 @@ export default function Home() {
     );
   }
 
+  function confirmDeletion() {
+    Modal.confirm({
+      icon: <ExclamationCircleOutlined />,
+      content: <Button onClick={destroyAll}>Click to destroy all</Button>,
+      onOk() {
+        console.log('OK');
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
+    });
+  }
+
   async function handleDeleteProduct(id, index) {
-    // Fazer Popup de confirmação de deleção
+    if (!confirmDeletion()) return;
     await api.delete(`/orders/${id}`);
     const newProducts = [...filteredProducts];
     newProducts.splice(index, 1);
@@ -44,6 +62,9 @@ export default function Home() {
 
   return (
     <Background>
+      <button type="button" onClick={handleDeleteProduct}>
+        OIIII mund0
+      </button>
       <TableContainer>
         <TableHeader>
           <InputSearch>

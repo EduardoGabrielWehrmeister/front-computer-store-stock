@@ -7,16 +7,12 @@ import history from '~/services/history';
 
 export function* signIn({ payload }) {
   try {
-    const { email, password, doRemember } = payload;
-    const response = yield call(api.post, 'sessions', {
+    const { email, password } = payload;
+    yield call(api.post, 'login', {
       email,
       password,
     });
-
-    const { token } = response.data;
-
-    api.defaults.headers.Authorization = `Bearer ${token}`;
-    yield put(authActions.signInSuccess(token));
+    yield put(authActions.signInSuccess());
     history.push('/home');
   } catch (err) {
     toast.error('Falha na autenticação, verifique seus dados');

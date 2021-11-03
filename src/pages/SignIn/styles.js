@@ -106,29 +106,3 @@ export const FormContainer = styled.form`
     }
   }
 `;
-
-export const FormFooter = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 15px 0px;
-
-  b {
-    color: #3d188c;
-    cursor: pointer;
-  }
-
-  .ant-radio-wrapper {
-    input {
-      border: unset;
-      border-radius: unset;
-      height: unset;
-      padding: unset;
-      margin: unset;
-    }
-
-    span {
-      color: #3d188c;
-    }
-  }
-`;

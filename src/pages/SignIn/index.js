@@ -1,16 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
-import { Radio } from 'antd';
 
 import { Form, Input } from '@rocketseat/unform';
-import {
-  Container,
-  FormContainer,
-  LeftBox,
-  RightBox,
-  FormFooter,
-} from './styles';
+import { Container, FormContainer, LeftBox, RightBox } from './styles';
 import logo from '../../assets/images/logo.png';
 
 import * as authActions from '~/store/modules/auth/actions';
@@ -24,11 +17,10 @@ const schema = Yup.object().shape({
 
 function SignIn() {
   const dispatch = useDispatch();
-  const [doRemember, setDoRemember] = useState(false);
 
   function handleSubmit(data) {
     const { email, password } = data;
-    dispatch(authActions.signInRequest(email, password, doRemember));
+    dispatch(authActions.signInRequest(email, password));
   }
 
   return (
@@ -49,15 +41,6 @@ function SignIn() {
             <Input name="email" type="email" placeholder="exemplo@gmail.com" />
             <b>SUA SENHA</b> <br />
             <Input name="password" type="password" placeholder="*********" />
-            <FormFooter>
-              <Radio
-                onClick={() => setDoRemember(!doRemember)}
-                checked={doRemember}
-              >
-                Lembre-se
-              </Radio>
-              <b>Esqueceu a senha?</b>
-            </FormFooter>
             <button type="submit">LOGIN</button>
           </Form>
         </FormContainer>
