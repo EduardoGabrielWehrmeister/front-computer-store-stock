@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { MdSearch, MdDelete, MdEdit } from 'react-icons/md';
-import { Modal } from 'antd';
-import CreateStockModel from '../createStock/index';
+import { toast } from 'react-toastify';
 // eslint-disable-next-line import/no-extraneous-dependencies
 
 import {
@@ -21,19 +20,6 @@ export default function Home() {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [productsToExport, setProductsToExport] = useState([]);
-  const [openCreateModel, setOpenCreateModel] = useState(false);
-
-  const [productReturned, setProductReturned] = useState();
-
-  const openModalCreate = () => {
-    //const response = await api.get(`product/${id}`);
-
-    setOpenCreateModel(true);
-  };
-
-  const closeModalCreate = () => {
-    setOpenCreateModel(false);
-  };
 
   async function loadProducts() {
     const { data } = await api.get('product/products');
@@ -54,22 +40,19 @@ export default function Home() {
     );
   }
 
-  function modalToConfirmDeleteProduct() {
-    Modal.confirm({
-      title: 'Você tem certeza que deseja excluir este produto?',
-      onOk() {
-        return true
-      },
-      onCancel() {
-        console.log('Cancel');
-      },
-    });
-  }
-
   async function handleDeleteProduct(id, index) {
-    // if (!modalToConfirmDeleteProduct()) return;
 
     await api.delete(`/product/${id}`);
+
+    toast.success('Produto excluido com sucesso!', {
+      position: "bottom-center",
+      autoClose: 3500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
 
     const newProducts = [...filteredProducts];
 
@@ -100,7 +83,7 @@ export default function Home() {
           </InputSearch>
           <div>
             <CSVLink filename={"Produtos.csv"} data={productsToExport}><button type="button">GERAR RELATÓRIO</button></CSVLink>
-            <button type="button" onClick={() => history.push('/create-product')}>ADICIONAR</button>
+            <button type="button" onClick={() => history.push('/product-register')}>ADICIONAR</button>
           </div>
         </TableHeader>
 
@@ -112,7 +95,7 @@ export default function Home() {
             <th>Preço</th>
             <th>Fornecedor</th>
             <th>Categoria</th>
-            <th>Unidade</th>
+            <th>Unidades</th>
             <th>Ações</th>
           </thead>
           <tbody>
@@ -131,10 +114,9 @@ export default function Home() {
                 <td>{product.category}</td>
                 <td>{product.unity}</td>
                 <td>
-                  <button type="button" style={{ border: "none", backgroundColor: "transparent", padding: "5px" }}><MdEdit size={20}></MdEdit></button>
+                  <button type="button" onClick={() => history.push(`product-register?product=${product.id}`)} style={{ border: "none", backgroundColor: "transparent", padding: "5px" }}><MdEdit size={20}></MdEdit></button>
                   <button type="button" onClick={() => handleDeleteProduct(product.id, index)} style={{ border: "none", backgroundColor: "transparent" }}><MdDelete size={20}></MdDelete></button>
                 </td>
-                <CreateStockModel isOpenModal={openCreateModel} handleClose={() => closeModalCreate()} />
               </tr>
             ))}
           </tbody>
@@ -144,3 +126,4 @@ export default function Home() {
     </Background>
   );
 }
+

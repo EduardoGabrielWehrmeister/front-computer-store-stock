@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./styles.css";
 import { Button, Input } from "@material-ui/core";
 import api from '../../services/api';
+import history from '../../services/history';
 
 export default function CreateStock() {
     function initialState() {
@@ -25,13 +26,15 @@ export default function CreateStock() {
     }
 
     const handleClick = async () => {
-        const response = await api.post(`product/create/`, values);
+        const response = await api.post(`product/create`, values);
 
         if (response?.status === 200) {
             document.location.reload(true);
         }
 
         setValues(initialState);
+        
+        history.push('/products')
     };
 
     return (

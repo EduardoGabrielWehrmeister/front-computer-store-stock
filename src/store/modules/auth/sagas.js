@@ -13,7 +13,7 @@ export function* signIn({ payload }) {
     //   password,
     // });
     yield put(authActions.signInSuccess());
-    history.push('/home');
+    history.push('/products');
   } catch (err) {
     toast.error('Falha na autenticação, verifique seus dados');
     yield put(authActions.signFailure());

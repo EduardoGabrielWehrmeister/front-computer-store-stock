@@ -16,27 +16,30 @@ import {
 import api from '../../services/api';
 import history from '../../services/history';
 
-export default function RecipientsRegister({ match }) {
+export default function RecipientsRegister() {
   const [name, setName] = useState('');
-  const [street, setStreet] = useState('');
-  const [number, setNumber] = useState('');
-  const [complement, setComplement] = useState('');
-  const [city, setCity] = useState('');
-  const [state, setState] = useState('');
-  const [postalCode, setPostalCode] = useState('');
+  const [description, setDescription] = useState('');
+  const [price, setPrice] = useState('');
+  const [category, setCategory] = useState('');
+  const [provider, setProvider] = useState('');
+  const [unity, setUnity] = useState('');
 
-  const { id } = match.params;
+  const search = window.location.search;
+  const params = new URLSearchParams(search);
+  const id = params.get("product");
+
 
   useEffect(() => {
     async function loadRecipient() {
-      const { data } = await api.get(`/recipients/${id}`);
-      setName(data.receiver_name);
-      setStreet(data.street);
-      setNumber(data.number);
-      setComplement(data.adress_complement);
-      setCity(data.city);
-      setState(data.state);
-      setPostalCode(data.postal_code);
+
+      const { data } = await api.get(`/product/${id}`);
+
+      setName(data.name);
+      setDescription(data.description);
+      setPrice(data.price);
+      setCategory(data.category);
+      setProvider(data.provider);
+      setUnity(data.unity);
     }
     if (id) {
       loadRecipient();
@@ -46,22 +49,41 @@ export default function RecipientsRegister({ match }) {
   async function handleSubmit(e) {
     e.preventDefault();
     const submitData = {
-      receiver_name: name,
-      street,
-      number,
-      adress_complement: complement,
-      city,
-      state,
-      postal_code: postalCode,
+      name,
+      description,
+      price,
+      category,
+      provider,
+      unity,
     };
     if (!id) {
-      await api.post('/recipients', submitData);
-      toast.success('Destinatário cadastrado com sucesso!');
-      return history.push('/recipients');
+      await api.post('/product/create', submitData);
+
+      toast.success('Produto cadastrado com sucesso!', {
+        position: "bottom-center",
+        autoClose: 3500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+
+      return history.push('/products');
     }
-    await api.put(`/recipients/${id}`, submitData);
-    toast.success('Destinatário editado com sucesso!');
-    return history.push('/recipients');
+    await api.put(`/product/${id}`, submitData);
+
+    toast.success('Produto editado com sucesso!', {
+      position: "bottom-center",
+      autoClose: 3500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+
+    return history.push('/products');
   }
 
   return (
@@ -69,12 +91,12 @@ export default function RecipientsRegister({ match }) {
       <TopInfo>
         <LeftInfo>
           <h1>
-            {id ? 'Edição de destinatários' : 'Cadastro de destinatários'}
+            {id ? 'Edição de Produtos' : 'Cadastro de Produtos'}
           </h1>
         </LeftInfo>
 
         <RightInfo>
-          <Link to="/recipients">
+          <Link to="/products">
             <MdKeyboardArrowLeft size={24} color="#fff" />
             <b>VOLTAR</b>
           </Link>
@@ -93,51 +115,42 @@ export default function RecipientsRegister({ match }) {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="John Doe"
+              placeholder="Teclado"
             />
-            <b>Rua</b>
+            <b>Descrição</b>
             <input
               type="text"
-              value={street}
-              onChange={(e) => setStreet(e.target.value)}
-              placeholder="Rua Beethoven"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Teclado Gamer"
             />
-            <b>Número</b>
+            <b>Preço</b>
             <input
               type="text"
-              value={number}
-              onChange={(e) => setNumber(e.target.value)}
-              placeholder="1729"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              placeholder="99"
             />
-            <b>Complemento</b>
+            <b>Categoria</b>
             <input
               type="text"
-              value={complement}
-              onChange={(e) => setComplement(e.target.value)}
-              placeholder="Casa"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              placeholder="Periférico"
             />
-          </div>
-          <div>
-            <b>Cidade</b>
+            <b>Fornecedor</b>
             <input
               type="text"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-              placeholder="Diadema"
+              value={provider}
+              onChange={(e) => setProvider(e.target.value)}
+              placeholder="Pichau"
             />
-            <b>Estado</b>
+            <b>Unidades</b>
             <input
               type="text"
-              value={state}
-              onChange={(e) => setState(e.target.value)}
-              placeholder="São Paulo"
-            />
-            <b>CEP</b>
-            <input
-              type="text"
-              value={postalCode}
-              onChange={(e) => setPostalCode(e.target.value)}
-              placeholder="09960-580"
+              value={unity}
+              onChange={(e) => setUnity(e.target.value)}
+              placeholder="10"
             />
           </div>
         </Form>
