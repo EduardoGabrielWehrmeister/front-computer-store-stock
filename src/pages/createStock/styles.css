@@ -1,0 +1,59 @@
+.container-stock-product-modal{
+    width: 600px;
+    margin-left: 600px;
+    margin-top: 125px;
+    height: 600px;
+    border-radius: 10px;
+    border: 0.5px solid #6727f2;
+    background-color: #ffffffe5;
+
+    display: block;
+    justify-content: center;
+    align-items: center;
+}
+
+.inputs-modal{
+    width: 100%;
+    margin-top: 50px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.button-create-modal.MuiButton-root{
+    color: #fff;
+    background: #6d5bd0;
+    padding: 8px 15px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    margin-left: 38.5%;
+    margin-top: 50px;
+
+    font-size: 14px;
+    font-family: 'Anonymous Pro', monospace;
+    
+  }
+
+  input.MuiInputBase-input {
+    width: 400px;
+    height: 40px;
+    border-radius: 5px;
+    border: 0.05px solid #6727f2;
+  
+    text-align: center;
+    margin-top: 10px !important;
+    background-color: #f5f8fa !important;
+  }
+  
+  .MuiInput-underline::before {
+    display: none;
+  }
+  
+  .MuiInput-underline::after {
+    display: none;
+  }

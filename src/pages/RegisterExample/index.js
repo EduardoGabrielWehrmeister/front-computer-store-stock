@@ -13,8 +13,8 @@ import {
   Form,
 } from './styles';
 
-import api from '~/services/api';
-import history from '~/services/history';
+import api from '../../services/api';
+import history from '../../services/history';
 
 export default function RecipientsRegister({ match }) {
   const [name, setName] = useState('');

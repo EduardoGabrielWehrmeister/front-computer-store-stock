@@ -6,7 +6,7 @@ import { Form, Input } from '@rocketseat/unform';
 import { Container, FormContainer, LeftBox, RightBox } from './styles';
 import logo from '../../assets/images/logo.png';
 
-import * as authActions from '~/store/modules/auth/actions';
+import * as authActions from '../../store/modules/auth/actions';
 
 const schema = Yup.object().shape({
   email: Yup.string()
