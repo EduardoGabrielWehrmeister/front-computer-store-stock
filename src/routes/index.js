@@ -4,16 +4,17 @@ import Route from './Route';
 
 import SignIn from '~/pages/SignIn';
 import Home from '~/pages/Home';
-// import Employees from '~/pages/Employees';
+import User from '~/pages/User';
+import RecipientsRegister from '~/pages/RegisterExample';
 
 export default function Routes() {
   return (
     <Switch>
       <Route exact path="/" component={SignIn} />
+      <Route exact path="/products" component={Home} isPrivate />
+      <Route exact path="/users" component={User} isPrivate />
 
-      <Route exact path="/home" component={Home} isPrivate />
-
-      {/* <Route exact path="/employees" component={Employees} isPrivate /> */}
+      <Route exact path="/test" component={RecipientsRegister} isPrivate />
     </Switch>
   );
 }

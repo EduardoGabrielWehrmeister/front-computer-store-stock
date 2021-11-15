@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { MdSearch } from 'react-icons/md';
-import { Modal, Button } from 'antd';
+import { MdSearch, MdDelete, MdEdit } from 'react-icons/md';
+import { Modal } from 'antd';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { ExclamationCircleOutlined } from '@ant-design/icons';
 
 import {
   Background,
@@ -14,33 +13,37 @@ import {
 } from './styles';
 
 import api from '~/services/api';
-
-function destroyAll() {
-  Modal.destroyAll();
-}
+import { CSVLink } from 'react-csv';
 
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const [productsToExport, setProductsToExport] = useState([]);
 
   async function loadProducts() {
-    const { data } = await api.get('/orders');
+    const { data } = await api.get('product/products');
+
     setProducts(data);
     setFilteredProducts(data);
   }
 
+  async function handleExportExcelProducts() {
+    const { data } = await api.get(`/product/export`);
+
+    setProductsToExport(data);
+  }
+
   function handleFilterChange(e) {
     setFilteredProducts(
-      products.filter((product) => String(product.id).includes(e.target.value))
+      products.filter((product) => String(product.name).includes(e.target.value))
     );
   }
 
-  function confirmDeletion() {
+  function modalToConfirmDeleteProduct() {
     Modal.confirm({
-      icon: <ExclamationCircleOutlined />,
-      content: <Button onClick={destroyAll}>Click to destroy all</Button>,
+      title: 'Você tem certeza que deseja excluir este produto?',
       onOk() {
-        console.log('OK');
+        return true
       },
       onCancel() {
         console.log('Cancel');
@@ -49,22 +52,27 @@ export default function Home() {
   }
 
   async function handleDeleteProduct(id, index) {
-    if (!confirmDeletion()) return;
-    await api.delete(`/orders/${id}`);
+    // if (!modalToConfirmDeleteProduct()) return;
+
+    await api.delete(`/product/${id}`);
+
     const newProducts = [...filteredProducts];
+
     newProducts.splice(index, 1);
+
+    setProducts(newProducts);
     setFilteredProducts(newProducts);
+
+    handleExportExcelProducts()
   }
 
   useEffect(() => {
     loadProducts();
+    handleExportExcelProducts();
   }, []);
 
   return (
     <Background>
-      <button type="button" onClick={handleDeleteProduct}>
-        OIIII mund0
-      </button>
       <TableContainer>
         <TableHeader>
           <InputSearch>
@@ -76,21 +84,21 @@ export default function Home() {
             />
           </InputSearch>
           <div>
-            <button type="button">GERAR RELATÓRIO</button>
+            <CSVLink filename={"Produtos.csv"} data={productsToExport}><button type="button">GERAR RELATÓRIO</button></CSVLink>
             <button type="button">ADICIONAR</button>
           </div>
         </TableHeader>
 
         <Table>
           <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nome</th>
-              <th>Quantidade</th>
-              <th>Preço</th>
-              <th>Fornecedor</th>
-              <th />
-            </tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Descrição</th>
+            <th>Preço</th>
+            <th>Fornecedor</th>
+            <th>Categoria</th>
+            <th>Unidade</th>
+            <th>Ações</th>
           </thead>
           <tbody>
             {filteredProducts.map((product, index) => (
@@ -101,11 +109,16 @@ export default function Home() {
                 }
               >
                 <td>#{product.id}</td>
-                <td>{product.Recipient.receiver_name}</td>
-                <td>{product.Recipient.city}</td>
-                <td>{product.Recipient.state}</td>
-                <td>{product.Recipient.state}</td>
-                <td>Nothing yet</td>
+                <td>{product.name}</td>
+                <td>{product.description}</td>
+                <td>{product.price}</td>
+                <td>{product.provider}</td>
+                <td>{product.category}</td>
+                <td>{product.unity}</td>
+                <td>
+                  <button type="button" style={{ border: "none", backgroundColor: "transparent", padding: "5px" }}><MdEdit size={20}></MdEdit></button>
+                  <button type="button" onClick={() => handleDeleteProduct(product.id, index)} style={{ border: "none", backgroundColor: "transparent" }}><MdDelete size={20}></MdDelete></button>
+                </td>
               </tr>
             ))}
           </tbody>

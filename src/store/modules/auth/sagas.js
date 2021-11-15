@@ -8,10 +8,10 @@ import history from '~/services/history';
 export function* signIn({ payload }) {
   try {
     const { email, password } = payload;
-    yield call(api.post, 'login', {
-      email,
-      password,
-    });
+    // yield call(api.post, 'login', {
+    //   email,
+    //   password,
+    // });
     yield put(authActions.signInSuccess());
     history.push('/home');
   } catch (err) {

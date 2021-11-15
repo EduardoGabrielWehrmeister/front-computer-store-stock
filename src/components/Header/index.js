@@ -9,7 +9,7 @@ import logo from '~/assets/images/logo.png';
 
 import { signOut } from '~/store/modules/auth/actions';
 
-import Modal from '../Modal';
+// import Modal from '../Modal';
 
 export default function Header() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -28,7 +28,7 @@ export default function Header() {
 
   return isLoggedIn ? (
     <>
-      {confirmationModal ? (
+      {/* {confirmationModal ? (
         <Modal
           width="350px"
           height="250px"
@@ -52,20 +52,20 @@ export default function Header() {
             </div>
           </ModalContainer>
         </Modal>
-      ) : null}
+      ) : null} */}
 
       <Container>
-        <Link to="/packages">
+        <Link to="/">
           <img src={logo} alt="Worth Box" />
         </Link>
         <div>
           <nav>
             <ul>
               <li>
-                <StyledLink to="/home">INÍCIO</StyledLink>
+                <StyledLink to="/products">PRODUTOS</StyledLink>
               </li>
               <li>
-                <StyledLink to="/employees">FUNCIONÁRIOS</StyledLink>
+                <StyledLink to="/users">FUNCIONÁRIOS</StyledLink>
               </li>
             </ul>
             <FaUserCircle size={70} color="#909090" />
