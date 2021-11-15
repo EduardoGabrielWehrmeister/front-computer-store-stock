@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { MdSearch, MdDelete, MdEdit } from 'react-icons/md';
 import { Modal } from 'antd';
+import CreateStockModel from '../createStock/index';
 // eslint-disable-next-line import/no-extraneous-dependencies
 
 import {
@@ -12,13 +13,27 @@ import {
   TableFooter,
 } from './styles';
 
-import api from '~/services/api';
+import api from '../../services/api';
+import history from '../../services/history';
 import { CSVLink } from 'react-csv';
 
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [productsToExport, setProductsToExport] = useState([]);
+  const [openCreateModel, setOpenCreateModel] = useState(false);
+
+  const [productReturned, setProductReturned] = useState();
+
+  const openModalCreate = () => {
+    //const response = await api.get(`product/${id}`);
+
+    setOpenCreateModel(true);
+  };
+
+  const closeModalCreate = () => {
+    setOpenCreateModel(false);
+  };
 
   async function loadProducts() {
     const { data } = await api.get('product/products');
@@ -85,7 +100,7 @@ export default function Home() {
           </InputSearch>
           <div>
             <CSVLink filename={"Produtos.csv"} data={productsToExport}><button type="button">GERAR RELATÓRIO</button></CSVLink>
-            <button type="button">ADICIONAR</button>
+            <button type="button" onClick={() => history.push('/create-product')}>ADICIONAR</button>
           </div>
         </TableHeader>
 
@@ -119,6 +134,7 @@ export default function Home() {
                   <button type="button" style={{ border: "none", backgroundColor: "transparent", padding: "5px" }}><MdEdit size={20}></MdEdit></button>
                   <button type="button" onClick={() => handleDeleteProduct(product.id, index)} style={{ border: "none", backgroundColor: "transparent" }}><MdDelete size={20}></MdDelete></button>
                 </td>
+                <CreateStockModel isOpenModal={openCreateModel} handleClose={() => closeModalCreate()} />
               </tr>
             ))}
           </tbody>

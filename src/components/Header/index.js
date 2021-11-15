@@ -5,9 +5,9 @@ import { FaUserCircle } from 'react-icons/fa';
 import { MdErrorOutline } from 'react-icons/md';
 
 import { Container, StyledLink, ModalContainer } from './styles';
-import logo from '~/assets/images/logo.png';
+import logo from '../../assets/images/logo.png';
 
-import { signOut } from '~/store/modules/auth/actions';
+import { signOut } from '../../store/modules/auth/actions';
 
 // import Modal from '../Modal';
 
